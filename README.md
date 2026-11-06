@@ -50,10 +50,5 @@ The tables and the demo data are created automatically on the first start.
 
 ## Documentation
 
-- [`docs/SECC_Documentation.docx`](docs/SECC_Documentation.docx): short documentation (12 pages). It covers the problem, the roles, explained screenshots, use cases, architecture, design, the database and business rules.
-- [`docs/SECC_Documentation_Full.docx`](docs/SECC_Documentation_Full.docx): full documentation.
+- [`docs/SECC_Documentation.docx`](docs/SECC_Documentation.docx): project documentation (12 pages). It covers the problem, the roles, explained screenshots, use cases, architecture, design, the database and business rules.
 - [`docs/diagrams`](docs/diagrams): UML diagrams (use case, class, sequence, state, component, deployment, relational and more).
-
-## Author
-
-Ariana Daboc
