@@ -1,0 +1,13 @@
+stateDiagram-v2
+  direction LR
+  [*] --> NEW : SOS / phone call
+  NEW --> DISPATCHED : resource assigned
+  NEW --> CANCELLED : patient cancels
+  DISPATCHED --> CANCELLED : patient cancels (before ON_SCENE)
+  DISPATCHED --> IN_PROGRESS : crew ON_SCENE
+  DISPATCHED --> CLOSED : dispatcher closes
+  IN_PROGRESS --> AT_HOSPITAL : patient handed over
+  IN_PROGRESS --> CLOSED : no transport needed / closed
+  AT_HOSPITAL --> CLOSED : dispatcher closes
+  CLOSED --> [*]
+  CANCELLED --> [*]

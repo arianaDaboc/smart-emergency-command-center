@@ -1,0 +1,25 @@
+flowchart TB
+  subgraph FE["frontend (React + TypeScript)"]
+    direction LR
+    fp["pages<br/>patient, dispatcher,<br/>crew, doctor, admin"]
+    fc["components<br/>Layout, MapView,<br/>VitalsTable, ui, hooks"]
+    fa["api.ts / auth.tsx<br/>REST client, JWT"]
+    ft["types.ts<br/>DTO types"]
+    fp --> fc
+    fp --> fa
+    fp --> ft
+    fa --> ft
+  end
+  subgraph BE["backend: com.smartemergency (Java)"]
+    direction LR
+    web["web<br/>REST controllers, Dto,<br/>ApiException, handler"]
+    service["service<br/>DispatchService, CrewService,<br/>DoctorService, PatientService,<br/>AdminService, PriorityCalculator"]
+    repo["repo<br/>Spring Data JPA<br/>repositories"]
+    domain["domain<br/>JPA entities, enums"]
+    config["config<br/>SecurityConfig, JWT,<br/>AuditFilter, DataSeeder"]
+    web --> service --> repo --> domain
+    service --> domain
+    config --> service
+    config --> repo
+  end
+  fa -- "HTTP/JSON" --> web

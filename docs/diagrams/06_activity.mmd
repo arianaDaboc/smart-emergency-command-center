@@ -1,0 +1,21 @@
+flowchart TD
+  subgraph CREW["Ambulance Crew"]
+    s(( )) --> a1[View assigned emergency] --> a2[Read patient Medical Card<br/>check allergies] --> a3[En route] --> a4[On scene]
+    a4 --> a5[Record vital signs<br/>administer first aid]
+    a5 --> dq{Transport<br/>needed?}
+    dq -- no --> a6[No transport needed]
+    dq -- yes --> a7[Select hospital<br/>start transport] --> a8[Record vital signs<br/>during transport] --> a9[Arrived at hospital] --> a10[Hand over patient]
+  end
+  subgraph DOCTOR["Doctor"]
+    b1[See patient in<br/>incoming list] --> b2[Read Medical Card<br/>and emergency data] --> b3[Administer treatment<br/>record diagnosis]
+    b3 --> b4{Allow patient to<br/>view status?}
+    b4 -- yes --> b5[Check option] --> b6[Finalize medical case]
+    b4 -- no --> b6
+  end
+  subgraph DISP["Dispatcher"]
+    c1[Incident ready to close] --> c2[Close incident] --> e((( )))
+  end
+  a7 -. "TRANSPORTING" .-> b1
+  a10 --> b2
+  a6 --> c1
+  b6 --> c1

@@ -1,0 +1,95 @@
+erDiagram
+  hospital ||--o{ app_user : "hospital_id"
+  app_user ||--o| medical_card : "patient_id"
+  app_user ||--o{ emergency_contact : "patient_id"
+  app_user |o--o| resource : "crew_user_id"
+  app_user |o--o{ incident : "patient_id"
+  incident ||--o{ assignment : "incident_id"
+  resource ||--o{ assignment : "resource_id"
+  hospital |o--o{ assignment : "destination_hospital_id"
+  assignment ||--o{ transport_event : "assignment_id"
+  assignment ||--o{ vital_sign : "assignment_id"
+  assignment ||--o| medical_case : "assignment_id"
+  app_user ||--o{ medical_case : "doctor_id"
+  app_user ||--o{ medical_history : "patient_id"
+  hospital {
+    BIGINT id PK
+    NVARCHAR name
+    FLOAT lat
+    FLOAT lng
+  }
+  app_user {
+    BIGINT id PK
+    NVARCHAR username UK
+    NVARCHAR password_hash
+    NVARCHAR full_name
+    NVARCHAR role
+    BIT enabled
+    BIGINT hospital_id FK
+  }
+  medical_card {
+    BIGINT id PK
+    BIGINT patient_id FK
+    DATE date_of_birth
+    NVARCHAR blood_type
+    NVARCHAR allergies
+    NVARCHAR chronic_conditions
+    NVARCHAR current_medication
+  }
+  emergency_contact {
+    BIGINT id PK
+    BIGINT patient_id FK
+    NVARCHAR name
+    NVARCHAR phone
+  }
+  resource {
+    BIGINT id PK
+    NVARCHAR code UK
+    NVARCHAR type
+    NVARCHAR status
+    BIGINT crew_user_id FK
+  }
+  incident {
+    BIGINT id PK
+    NVARCHAR type
+    NVARCHAR severity
+    INT affected_people
+    NVARCHAR status
+    BIGINT patient_id FK
+    DATETIMEOFFSET created_at
+  }
+  assignment {
+    BIGINT id PK
+    BIGINT incident_id FK
+    BIGINT resource_id FK
+    BIT active
+    NVARCHAR transport_status
+    BIGINT destination_hospital_id FK
+  }
+  transport_event {
+    BIGINT id PK
+    BIGINT assignment_id FK
+    NVARCHAR status
+    DATETIMEOFFSET event_at
+  }
+  vital_sign {
+    BIGINT id PK
+    BIGINT assignment_id FK
+    INT pulse
+    INT spo2
+    NUMERIC temperature
+    NVARCHAR patient_condition
+  }
+  medical_case {
+    BIGINT id PK
+    BIGINT assignment_id FK
+    BIGINT doctor_id FK
+    NVARCHAR diagnosis
+    BIT finalized
+  }
+  medical_history {
+    BIGINT id PK
+    BIGINT patient_id FK
+    NVARCHAR diagnosis
+    DATETIMEOFFSET event_date
+  }

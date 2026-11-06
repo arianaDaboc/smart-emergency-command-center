@@ -1,0 +1,17 @@
+flowchart TD
+  S([Start]) --> A[User opens the application]
+  A --> T{Token saved<br/>in the browser?}
+  T -- yes --> ME[GET /api/auth/me]
+  ME --> V{Token valid and<br/>account enabled?}
+  V -- yes --> HOME[Open the home page<br/>of the user's role]
+  V -- no --> LG
+  T -- no --> LG[Login page:<br/>username + password]
+  LG --> PW{Password correct?<br/>BCrypt check}
+  PW -- no --> F1[Audit LOGIN_FAILED<br/>message: wrong username or password] --> LG
+  PW -- yes --> EN{Account<br/>enabled?}
+  EN -- no --> F2[Audit LOGIN_FAILED<br/>message: account disabled] --> LG
+  EN -- yes --> TK[Create JWT token 8 h<br/>update last login, audit LOGIN] --> HOME
+  HOME --> RQ[User calls an API function]
+  RQ --> RL{Role allowed<br/>for the path?}
+  RL -- no --> F3[403 Access denied] --> HOME
+  RL -- yes --> OK[Request processed<br/>and written in the audit log] --> E([End])

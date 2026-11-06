@@ -1,0 +1,31 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    # SQL Server (managed with SQL Server Management Studio).
+    # For a named instance (e.g. SQL Express) use:
+    #   jdbc:sqlserver://localhost;instanceName=SQLEXPRESS;databaseName=secc;encrypt=true;trustServerCertificate=true
+    url: ${DB_URL:jdbc:sqlserver://localhost:1433;databaseName=secc;encrypt=true;trustServerCertificate=true}
+    username: ${DB_USER:secc}
+    password: ${DB_PASSWORD:Secc_Pass2026!}
+  jpa:
+    hibernate:
+      ddl-auto: none              # the schema is created by Flyway (db/migration)
+    open-in-view: false
+    properties:
+      hibernate.jdbc.time_zone: UTC
+      hibernate.use_nationalized_character_data: true   # NVARCHAR, so Romanian diacritics are stored correctly
+  flyway:
+    enabled: true
+
+secc:
+  jwt:
+    # change it in production (min. 32 characters)
+    secret: ${JWT_SECRET:smart-emergency-command-center-dev-secret-key-2026}
+    validity-hours: 8
+  seed-demo-data: true
+
+logging:
+  level:
+    org.hibernate.SQL: warn

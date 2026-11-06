@@ -1,0 +1,18 @@
+flowchart LR
+  p1["<u><b>p1 : User</b></u><br/>username = patient1<br/>fullName = Ion Popescu<br/>role = PATIENT"]
+  mc["<u><b>mc1 : MedicalCard</b></u><br/>bloodType = A+<br/>allergies = Penicillin<br/>chronicConditions = Hypertension"]
+  i7["<u><b>i7 : Incident</b></u><br/>type = MEDICAL<br/>severity = HIGH<br/>status = IN_PROGRESS<br/>priority = 53"]
+  amb["<u><b>amb1 : Resource</b></u><br/>code = AMB-01<br/>type = AMBULANCE<br/>status = BUSY"]
+  cr["<u><b>crew1 : User</b></u><br/>role = CREW"]
+  a12["<u><b>a12 : Assignment</b></u><br/>active = true<br/>transportStatus = TRANSPORTING"]
+  v1["<u><b>v1 : VitalSign</b></u><br/>pulse = 130<br/>spo2 = 89<br/>condition = SERIOUS"]
+  h1["<u><b>h1 : Hospital</b></u><br/>name = County Emergency<br/>Hospital Cluj"]
+  d1["<u><b>doctor1 : User</b></u><br/>role = DOCTOR"]
+  p1 --- mc
+  i7 --- p1
+  i7 --- a12
+  a12 --- amb
+  amb --- cr
+  a12 --- v1
+  a12 --- h1
+  d1 --- h1

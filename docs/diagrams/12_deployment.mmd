@@ -1,0 +1,22 @@
+flowchart LR
+  subgraph PC["&lt;&lt;device&gt;&gt; User PC / phone"]
+    BR["&lt;&lt;execution environment&gt;&gt;<br/>Web browser<br/>(Chrome, Edge, Firefox)"]
+    ART1["&lt;&lt;artifact&gt;&gt;<br/>index.html + JS bundle"]
+    BR --- ART1
+  end
+  subgraph SRV["&lt;&lt;device&gt;&gt; Application server (Windows / Linux)"]
+    NODE["&lt;&lt;execution environment&gt;&gt;<br/>Node.js - Vite :5173<br/>(or any static web server)"]
+    JVM["&lt;&lt;execution environment&gt;&gt;<br/>JVM 17 - Spring Boot,<br/>embedded Tomcat :8080"]
+    JAR["&lt;&lt;artifact&gt;&gt;<br/>secc-backend.jar"]
+    JVM --- JAR
+  end
+  subgraph DBS["&lt;&lt;device&gt;&gt; Database server"]
+    MSSQL["&lt;&lt;execution environment&gt;&gt;<br/>SQL Server 2022 :1433"]
+    DBA["&lt;&lt;artifact&gt;&gt;<br/>database secc"]
+    MSSQL --- DBA
+  end
+  OSM["&lt;&lt;external system&gt;&gt;<br/>OpenStreetMap tile servers"]
+  BR -- "HTTP :5173" --> NODE
+  NODE -- "proxy /api - HTTP :8080" --> JVM
+  JVM -- "TCP/IP :1433 (JDBC)" --> MSSQL
+  BR -- "HTTPS" --> OSM

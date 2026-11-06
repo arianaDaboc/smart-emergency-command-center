@@ -1,0 +1,30 @@
+sequenceDiagram
+  autonumber
+  actor Pat as Patient
+  participant UI as React UI
+  participant PC as PatientController
+  participant DS as DispatchService
+  participant PCalc as PriorityCalculator
+  participant RR as ResourceRepository
+  participant DB as SQL Server
+  actor Crew as Ambulance Crew
+  Pat->>UI: press SOS
+  UI->>UI: navigator.geolocation (lat, lng)
+  UI->>PC: POST /api/patient/emergencies {type, note, lat, lng} + JWT
+  PC->>DS: createFromSos(patient, request)
+  DS->>DB: INSERT incident (status NEW)
+  DS->>PCalc: score(type, severity, people, createdAt)
+  PCalc-->>DS: 53
+  DS->>RR: findByTypeAndStatus(AMBULANCE, AVAILABLE)
+  RR-->>DS: available ambulances
+  DS->>DS: choose nearest (Haversine)
+  DS->>RR: lockByIds([AMB-01]) (pessimistic lock)
+  DS->>DB: UPDATE resource BUSY, INSERT assignment ASSIGNED, UPDATE incident DISPATCHED
+  DS-->>PC: incident
+  PC-->>UI: 201 PatientEmergencyView
+  UI-->>Pat: confirmation: incident #, ambulance, distance
+  loop every 5 seconds
+    Crew->>UI: crew screen polling
+    UI->>PC: GET /api/crew/assignment
+    PC-->>UI: assignment + patient Medical Card
+  end

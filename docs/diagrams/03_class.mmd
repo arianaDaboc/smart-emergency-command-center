@@ -1,0 +1,122 @@
+classDiagram
+  direction TB
+  class User {
+    -Long id
+    -String username
+    -String passwordHash
+    -String fullName
+    -Role role
+    -boolean enabled
+    -Instant lastLogin
+  }
+  class Hospital {
+    -Long id
+    -String name
+    -double lat
+    -double lng
+  }
+  class MedicalCard {
+    -Long id
+    -LocalDate dateOfBirth
+    -String bloodType
+    -String allergies
+    -String chronicConditions
+    -String currentMedication
+    -String medicalNotes
+    -Double homeLat
+    -Double homeLng
+  }
+  class EmergencyContact {
+    -Long id
+    -String name
+    -String relationship
+    -String phone
+  }
+  class Incident {
+    -Long id
+    -IncidentType type
+    -Severity severity
+    -int affectedPeople
+    -String description
+    -double lat
+    -double lng
+    -IncidentSource source
+    -IncidentStatus status
+    -Instant createdAt
+    -Instant firstDispatchedAt
+    -Instant closedAt
+  }
+  class Resource {
+    -Long id
+    -String code
+    -ResourceType type
+    -ResourceStatus status
+    -double lat
+    -double lng
+  }
+  class Assignment {
+    -Long id
+    -boolean active
+    -Instant assignedAt
+    -Instant releasedAt
+    -TransportStatus transportStatus
+    -String handoverNote
+  }
+  class TransportEvent {
+    -Long id
+    -TransportStatus status
+    -Instant at
+  }
+  class VitalSign {
+    -Long id
+    -Integer pulse
+    -Integer spo2
+    -Integer systolic
+    -Integer diastolic
+    -BigDecimal temperature
+    -BigDecimal oxygenLpm
+    -boolean iv
+    -String medication
+    -PatientCondition condition
+  }
+  class MedicalCase {
+    -Long id
+    -String diagnosis
+    -String treatment
+    -String medication
+    -String procedures
+    -PatientStatus patientStatus
+    -boolean finalized
+  }
+  class MedicalHistoryEntry {
+    -Long id
+    -Instant eventDate
+    -String diagnosis
+    -String treatment
+  }
+  class DispatchService {
+    +createFromSos(User, SosRequest) Incident
+    +recommend(Incident) Recommendation
+    +assign(Long, List~Long~) Incident
+    +autoAssignNearestAmbulance(Incident) Assignment
+    +close(Long, String) Incident
+  }
+  class PriorityCalculator {
+    +score(type, severity, people, createdAt, dispatchedAt, now)$ int
+  }
+  User "1" -- "0..1" MedicalCard : patient
+  User "1" -- "0..5" EmergencyContact
+  User "0..*" --> "0..1" Hospital : works at
+  Resource "0..1" --> "0..1" User : crew
+  Incident "0..*" --> "0..1" User : patient
+  Incident "1" *-- "0..*" Assignment
+  Assignment "0..*" --> "1" Resource
+  Assignment "0..*" --> "0..1" Hospital : destination
+  Assignment "1" *-- "0..*" TransportEvent
+  Assignment "1" *-- "0..*" VitalSign : transport record
+  Assignment "1" -- "0..1" MedicalCase
+  MedicalCase "0..*" --> "1" User : doctor
+  User "1" -- "0..*" MedicalHistoryEntry : history
+  DispatchService ..> Incident
+  DispatchService ..> Resource
+  DispatchService ..> PriorityCalculator

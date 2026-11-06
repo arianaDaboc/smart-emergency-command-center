@@ -1,0 +1,15 @@
+stateDiagram-v2
+  direction LR
+  [*] --> ASSIGNED : ambulance assigned
+  ASSIGNED --> EN_ROUTE : crew starts
+  ASSIGNED --> CANCELLED : incident cancelled / closed
+  EN_ROUTE --> ON_SCENE : arrived
+  EN_ROUTE --> CANCELLED : patient cancels
+  ON_SCENE --> TRANSPORTING : hospital selected
+  ON_SCENE --> NO_TRANSPORT : treated on scene
+  TRANSPORTING --> AT_HOSPITAL : arrived at hospital
+  AT_HOSPITAL --> HANDED_OVER : hand over (record locked)
+  HANDED_OVER --> [*]
+  NO_TRANSPORT --> [*]
+  CANCELLED --> [*]
+  note right of ON_SCENE : vital signs can be recorded in ON_SCENE, TRANSPORTING and AT_HOSPITAL

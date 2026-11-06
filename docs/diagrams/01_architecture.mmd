@@ -1,0 +1,21 @@
+flowchart LR
+  subgraph Clients["Client side - web browser"]
+    P["Patient"]:::actor
+    D["Dispatcher"]:::actor
+    C["Ambulance Crew"]:::actor
+    Dr["Doctor"]:::actor
+    A["Administrator"]:::actor
+    SPA["React + TypeScript<br/>Single Page Application<br/>(pages per role, Leaflet map)"]
+  end
+  P & D & C & Dr & A --> SPA
+  SPA -- "HTTP/JSON REST API<br/>Authorization: Bearer JWT<br/>polling every 5 s" --> SEC
+  SPA -. "map tiles" .-> OSM[("OpenStreetMap<br/>tile server")]
+  subgraph Server["Application server - Java 17, Spring Boot 3"]
+    SEC["Security layer<br/>JWT filter + role rules<br/>Audit filter"]
+    CTRL["REST controllers<br/>/api/patient, /api/dispatcher,<br/>/api/crew, /api/doctor, /api/admin"]
+    SRV["Business services<br/>Smart Dispatch & Priority,<br/>Transport, Medical case, Admin"]
+    REPO["Spring Data JPA repositories<br/>(Hibernate)"]
+    SEC --> CTRL --> SRV --> REPO
+  end
+  REPO -- "JDBC (mssql-jdbc), TCP 1433" --> DB[("Microsoft SQL Server<br/>database secc<br/>schema created by Flyway")]
+  classDef actor fill:#eef4ff,stroke:#1849a9

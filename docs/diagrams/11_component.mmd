@@ -1,0 +1,26 @@
+flowchart LR
+  subgraph Web["&lt;&lt;component&gt;&gt; Web Client"]
+    Pages["[Role pages]"]
+    Map["[MapView - Leaflet]"]
+    Api["[API client]"]
+    Auth["[Auth context]"]
+    Pages --> Map
+    Pages --> Api
+    Api --> Auth
+  end
+  subgraph App["&lt;&lt;component&gt;&gt; SECC Server"]
+    Sec["[Security / JWT]"]
+    Rest["[REST API]"]
+    Disp["[Smart Dispatch & Priority]"]
+    Trans["[Transport & Vital Signs]"]
+    Med["[Medical Case & History]"]
+    Adm["[Administration & Audit]"]
+    Pers["[Persistence - JPA]"]
+    Rest --> Disp & Trans & Med & Adm
+    Disp & Trans & Med & Adm --> Pers
+    Sec --> Rest
+  end
+  Api -- "REST interface (JSON)" --> Sec
+  Pers -- "JDBC" --> DB[("&lt;&lt;component&gt;&gt;<br/>SQL Server DB")]
+  Fly["[Flyway migrations]"] --> DB
+  Map -. "tiles" .-> OSM[("OpenStreetMap")]

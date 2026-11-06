@@ -1,0 +1,17 @@
+flowchart LR
+  disp(["<u>:Dispatcher</u>"])
+  ui["<u>:IncidentPage</u><br/>(React)"]
+  ctl["<u>:DispatcherController</u>"]
+  ds["<u>:DispatchService</u>"]
+  rr["<u>:ResourceRepository</u>"]
+  ar["<u>:AssignmentRepository</u>"]
+  ir["<u>:IncidentRepository</u>"]
+  disp -- "1: Accept recommendation" --> ui
+  ui -- "2: POST /incidents/{id}/assign" --> ctl
+  ctl -- "3: assign(id, resourceIds)" --> ds
+  ds -- "4: lockByIds(ids)" --> rr
+  ds -- "5: save(resource BUSY)" --> rr
+  ds -- "6: save(assignment ASSIGNED)" --> ar
+  ds -- "7: save(incident DISPATCHED)" --> ir
+  ctl -- "8: IncidentDetail" --> ui
+  ui -- "9: show assigned resources" --> disp

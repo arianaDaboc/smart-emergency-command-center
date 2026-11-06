@@ -1,0 +1,16 @@
+flowchart TD
+  S([Dispatcher opens an incident]) --> R[Determine needed resources:<br/>ambulances = ceil people/4, 1..3<br/>+ fire team / fire truck / police by type]
+  R --> L[For each needed type: list AVAILABLE<br/>resources ordered by Haversine distance]
+  L --> M{Enough available<br/>resources?}
+  M -- no --> MS[Show what is missing<br/>e.g. missing: 1 fire truck]
+  M -- yes --> SH[Show recommendation]
+  MS --> SH
+  SH --> CH{Dispatcher<br/>decision}
+  CH -- accept --> SEL[Selected = recommended resources]
+  CH -- manual --> MAN[Dispatcher selects resources<br/>from the available list]
+  SEL & MAN --> LK[Lock the selected resources<br/>in the database]
+  LK --> AV{All still<br/>AVAILABLE?}
+  AV -- no --> ER[409: resource no longer available<br/>reload recommendation] --> L
+  AV -- yes --> AS[Resources BUSY, create assignments<br/>ambulances: transport ASSIGNED]
+  AS --> ST[Incident DISPATCHED,<br/>first dispatch time saved]
+  ST --> E([Crews see the emergency])

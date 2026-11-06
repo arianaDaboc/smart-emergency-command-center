@@ -1,0 +1,11 @@
+flowchart TD
+  B([From part 1]) --> OS[Crew ON_SCENE<br/>reads Medical Card]
+  OS --> VS[Record vital signs<br/>administer first aid]
+  VS --> TN{Transport<br/>needed?}
+  TN -- no --> NT[NO_TRANSPORT<br/>ambulance AVAILABLE]
+  TN -- yes --> TR[TRANSPORTING<br/>to selected hospital]
+  TR --> HO[AT_HOSPITAL<br/>hand over, record locked]
+  HO --> DOC[Doctor reads Medical Card,<br/>treats patient, diagnosis]
+  DOC --> FIN[Finalize case<br/>Medical History updated]
+  NT & FIN --> CL[Dispatcher closes incident<br/>resources released]
+  CL --> E([End])

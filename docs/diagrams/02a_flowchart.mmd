@@ -1,0 +1,14 @@
+flowchart TD
+  S([Start]) --> A[Patient presses SOS]
+  A --> L{Location<br/>available?}
+  L -- yes --> G[Use GPS coordinates]
+  L -- no --> H[Use home address<br/>approximate]
+  G & H --> I[Create incident NEW<br/>calculate priority 0-100]
+  I --> AV{Ambulance<br/>AVAILABLE?}
+  AV -- no --> Q[Incident stays NEW<br/>first in dispatcher list]
+  Q --> MAN[Dispatcher assigns<br/>recommended resources]
+  AV -- yes --> NA[Assign nearest ambulance<br/>Haversine distance]
+  MAN & NA --> DSP[Incident DISPATCHED<br/>crew sees the emergency]
+  DSP --> CN{Patient cancels<br/>before ON_SCENE?}
+  CN -- yes --> CC[Incident CANCELLED<br/>ambulance AVAILABLE] --> E([End])
+  CN -- no --> B([Continue with part 2])
